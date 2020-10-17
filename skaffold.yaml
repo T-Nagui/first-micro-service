@@ -1,0 +1,28 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+metadata:
+  name: secondapp
+deploy:
+  kubectl:
+    manifests:
+    - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+  - image: funpro/auth
+    context: auth
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - src: 'src/**/*.ts'  
+          dest: .
+  - image: funpro/client
+    context: client
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - src: '**/*.js'  
+          dest: .          
